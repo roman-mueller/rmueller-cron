@@ -45,6 +45,12 @@ class cron (
   Array[Cron::User]    $users_deny         = [],
   Boolean              $manage_users_allow = false,
   Boolean              $manage_users_deny  = false,
+  Boolean              $manage_crontab     = false,
+  String               $crontab_shell      = '/bin/bash',
+  String               $crontab_path       = '/sbin:/bin:/usr/sbin:/usr/bin',
+  String               $crontab_mailto     = 'root',
+  Optional[String]     $crontab_home     = undef,
+  Cron::Run_parts      $crontab_run_parts = {},
 ) {
   contain 'cron::install'
   contain 'cron::service'
@@ -69,6 +75,32 @@ class cron (
       owner   => 'root',
       group   => 0,
       content => epp('cron/users.epp', { 'users' => $users_deny }),
+    }
+  }
+
+  if $manage_crontab {
+    # Template uses:
+    # - $crontab_shell
+    # - $crontab_path
+    # - $crontab_mailto
+    # - $crontab_home
+    # - $crontab_run_parts
+    file { '/etc/crontab':
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('cron/crontab.erb'),
+    }
+
+    $crontab_run_parts.each |String $r, Hash $r_params| {
+      file { "/etc/cron.${r}":
+        ensure => directory,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+        before => File['/etc/crontab'],
+      }
     }
   }
 
