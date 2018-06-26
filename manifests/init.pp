@@ -90,7 +90,7 @@ class cron (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('cron/crontab.erb'),
+      content => epp('cron/crontab.epp'),
     }
 
     $crontab_run_parts.each |String $r, Hash $r_params| {
