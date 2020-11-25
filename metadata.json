@@ -61,6 +61,9 @@
     }
   ],
   "dependencies": [
-
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.25.0 < 7.0.0"
+    }
   ]
 }

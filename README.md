@@ -62,6 +62,12 @@ This class allows specifying the following parameter:
    * `manage_users_deny` - optional - defaults to false, whether to manage `/etc/cron.deny`
    * `users_allow` - optional - An array of users to add to `/etc/cron.allow`
    * `users_deny` - optional - An array of users to add to `/etc/cron.deny`
+   * `manage_crontab` - optional - defaults to "false"
+   * `crontab_shell` - optional - defaults to `/bin/bash`
+   * `crontab_path` - optional - defaults to `/sbin:/bin:/usr/sbin:/usr/bin`
+   * `crontab_mailto` - optional - defaults to `root`
+   * `crontab_home` - optional
+   * `crontab_run_parts` - optional - defaults to `{}`
 
 
 Examples:
@@ -78,6 +84,14 @@ or:
   }
 ```
 
+Add custom crontab run-parts
+
+```puppet
+class { 'cron':
+  manage_crontab    => true,
+  crontab_run_parts => {'5min' => { 'user' => 'root', 'minute' => '*/5' }},
+}
+```
 
 ### cron::job
 
