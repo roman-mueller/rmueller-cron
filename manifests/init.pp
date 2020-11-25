@@ -99,7 +99,7 @@ class cron (
     file { '/etc/crontab':
       ensure  => file,
       owner   => 'root',
-      group   => 'root',
+      group   => 0,
       mode    => '0644',
       content => epp('cron/crontab.epp'),
     }
@@ -108,7 +108,7 @@ class cron (
       file { "/etc/cron.${r}":
         ensure => directory,
         owner  => 'root',
-        group  => 'root',
+        group  => 0,
         mode   => '0755',
         before => File['/etc/crontab'],
       }
